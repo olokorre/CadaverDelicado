@@ -7,7 +7,15 @@ def jota(pal):
 	if len(pal) == 1: return 1
 	else: return len(pal) - 1
 
-palavras = ["artigo", "substantivo", "verbo", "adverbio"]
+def espaco(lista, index):
+	n = 0
+	for i in lista:
+		if index == i: break
+		else: n += 1
+	if len(lista) - 1 == n: return ""
+	else: return " "
+
+palavras = ["substantivo próprio", "verbo", "adverbio de intensidade", "artigo", "substantivo"]
 palavra = None
 user = None
 palavraUser = None
@@ -26,16 +34,19 @@ def index():
 
 @app.route('/respostas')
 def responder():
+	global palavraUser
+	if palavraUser == None: return redirect('/')
 	frase = ""
 	for i in palavras:
-		if i == palavras[palavraUser]:
-			frase += user + " "
+		if i == palavras[palavraUser]: frase += user
 		else:
-			arquivo = open("Palavras/" + i + ".txt", "r")
+			arquivo = open("static/Palavras/" + i + ".txt", "r")
 			previas = arquivo.readlines()
-			frase += previas[random.randint(0, jota(previas))] + " "
+			frase += previas[random.randint(0, jota(previas))]
 			arquivo.close()
-
+		frase += espaco(palavras, i)
+	frase += "."
+	palavraUser = None
 	return render_template("respostas.html", resp = frase)
 
 # rotas auxiliares
