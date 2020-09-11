@@ -28,8 +28,9 @@ def index():
 		palavra = palavras[palavraUser]
 	elif request.method == 'POST':
 		user = request.form['aa']
+		if user == "myon": return redirect("/video/myon.mp4")
 		return redirect('/respostas')
-		
+
 	return render_template("index.html", pedir = palavra)
 
 @app.route('/respostas')
@@ -61,6 +62,10 @@ def send_css(path):
 @app.route('/image/<path:path>')
 def send_image(path):
 	return send_from_directory('static/image', path)
+
+@app.route('/video/<path:path>')
+def send_video(path):
+	return send_from_directory('static/video', path)
 
 # inicializador
 if __name__ == "__main__":
