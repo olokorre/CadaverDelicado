@@ -8,11 +8,13 @@
         <div id="principal" align="center">
             <form method="POST">
                 <span>
-                    Insira um {{pedir}}:
+                    <label for="palavra-escolhida">Insira um {{pedir}}</label>
                     <input
+                        id="palavra-escolhida"
                         name="palavra-escolhida"
                         type="text"
                         autocomplete="off"
+                        required
                     />
                     <button type="submit">Enviar</button>
                 </span>
