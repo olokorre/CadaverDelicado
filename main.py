@@ -24,8 +24,7 @@ palavraUser = None
 def index():
 	global user, palavra, palavraUser
 	if request.method == 'GET':
-		palavraUser = random.randint(0, (len(palavras) - 1))
-		palavra = palavras[palavraUser]
+		palavra = random.choice(palavras)
 	elif request.method == 'POST':
 		user = request.form['aa']
 		if user == "myon": return redirect("/video/myon.mp4")
