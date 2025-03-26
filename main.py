@@ -3,10 +3,6 @@ import random
 
 app = Flask(__name__)
 
-def jota(pal):
-	if len(pal) == 1: return 1
-	else: return len(pal) - 1
-
 def espaco(lista, index):
 	n = 0
 	for i in lista:
@@ -17,36 +13,35 @@ def espaco(lista, index):
 
 palavras = ["substantivo próprio", "verbo", "adverbio de intensidade", "artigo", "substantivo"]
 palavra = None
-user = None
-palavraUser = None
+palavraEscolhida = None
 
 @app.route('/', methods = ('GET', 'POST')) # rota principal
 def index():
-	global user, palavra, palavraUser
+	global palavraEscolhida, palavra
 	if request.method == 'GET':
 		palavra = random.choice(palavras)
 	elif request.method == 'POST':
-		user = request.form['aa']
-		if user == "myon": return redirect("/video/myon.mp4")
+		palavraEscolhida = request.form['palavra-escolhida']
+		if palavraEscolhida == "myon": return redirect("/video/myon.mp4")
 		return redirect('/respostas')
 
 	return render_template("index.html", pedir = palavra)
 
 @app.route('/respostas')
 def responder():
-	global palavraUser
-	if palavraUser == None: return redirect('/')
+	global palavra
+	if palavra == None: return redirect('/')
 	frase = ""
 	for i in palavras:
-		if i == palavras[palavraUser]: frase += user
+		if i == palavra: frase += palavraEscolhida
 		else:
-			arquivo = open("static/Palavras/" + i + ".txt", "r")
+			arquivo = open("static/palavras/" + i + ".txt", "r")
 			previas = arquivo.readlines()
-			frase += previas[random.randint(0, jota(previas))]
+			frase += random.choice(previas)
 			arquivo.close()
 		frase += espaco(palavras, i)
 	frase += "."
-	palavraUser = None
+	palavra = None
 	return render_template("respostas.html", resp = frase)
 
 # rotas auxiliares
